@@ -31,6 +31,7 @@ It enables secure user management, course creation, attendance tracking, enrollm
 ---
 
 ## ⚙️ Tech Stack
+- **Frontend**: Reactjs + Tanstack Router 
 - **Backend**: Node.js + Express  
 - **Database**: MongoDB + Mongoose ODM  
 - **Authentication**: bcryptjs + role-based validation  
