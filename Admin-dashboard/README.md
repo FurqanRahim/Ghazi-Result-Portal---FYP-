@@ -1,80 +1,101 @@
-# Free Tailwind admin dashboard template
+# 📊 Ghazi Result Portal
 
-![Mosaic Tailwind admin template preview](https://github.com/cruip/tailwind-dashboard-template/assets/2683512/ef306423-3b89-4d0c-be80-9c5c682478d1)
+Ghazi Result Portal is a **role-based academic result platform** with three dashboards: **Student**, **Teacher**, and **HOD**.  
+It enables secure user management, course creation, attendance tracking, enrollment, and result publishing.
 
-**Mosaic Lite** is a responsive admin dashboard template built on top of TailwindCSS and fully coded in React. It comes with several pre-coded charts (built with Chart.js 3) and widgets, and it's a great starting for anyone who wants to create a user interface for SaaS products, administrator dashboards, modern web apps, and more.
+---
 
-Use it for whatever you want, and be sure to reach us out on [Twitter](https://twitter.com/Cruip_com) if you build anything cool/useful with it.
+## 🚀 Key Features
+- **Role-Based Dashboards**  
+  - **HOD** → Creates courses, assigns classes & teachers.  
+  - **Teacher** → Marks attendance, uploads results.  
+  - **Student** → Views results, attendance, and academic progress.  
 
-Created and maintained with ❤️ by [Cruip.com](https://cruip.com/).
+- **Secure Authentication**  
+  - Passwords hashed with **bcryptjs**.  
+  - Role-based access control for students, teachers, and admins.  
 
-## Live demo
+- **Data Models**  
+  - **Admin** → Manages portal.  
+  - **Student** → Registration, login, course enrollment.  
+  - **Teacher** → Assigned to courses & classes.  
+  - **Course & Class** → Structured by HOD with shift, section, and credit hours.  
+  - **Attendance** → Tracks daily presence/absence.  
+  - **Enrollment** → Links students with classes and courses.  
+  - **Result** → Stores mid, final, grade, and status.  
 
-Check the live demo here 👉️ [https://mosaic.cruip.com/](https://mosaic.cruip.com/)
+- **Database Integrity**  
+  - Prevents deletion of records if referenced in other schemas (e.g., Courses, Enrollments).  
+  - Cascade cleanups for related entities (e.g., student deletion removes enrollment).  
 
-## Mosaic Pro
+---
 
-[![Mosaic Tailwind Admin Template](https://github.com/cruip/tailwind-dashboard-template/assets/2683512/2b4d0fae-bb07-4229-8a8a-48005f2f33cb)](https://cruip.com/mosaic/)
+## ⚙️ Tech Stack
+- **Backend**: Node.js + Express  
+- **Database**: MongoDB + Mongoose ODM  
+- **Authentication**: bcryptjs + role-based validation  
+- **Validation**: validator.js  
 
-## Design files
+---
 
-If you need the design files, you can download them from Figma's Community 👉 https://bit.ly/3sigqHe
+## 📌 Summary
+The **Ghazi Result Portal** provides a **centralized digital platform** for managing courses, attendance, and results.  
+With secure authentication, role-based dashboards, and data integrity rules, it ensures a **reliable academic record system**.  
 
-## Table of contents
 
-* [Usage](#usage)
-  * [Project setup](#project-setup)
-  * [Compiles and hot-reloads for development](#compiles-and-hot-reloads-for-development)
-  * [Compiles and minifies for production](#compiles-and-minifies-for-production)
-  * [Customize configuration](#customize-configuration)
-* [Support notes](#support-notes)            
-* [Credits](#credits)
-* [Terms and License](#terms-and-license)
-* [About Us](#about-us)
-* [Stay in the loop](#stay-in-the-loop)
+# 🏗️ Ghazi Result Portal – System Architecture
 
-## Usage
+```mermaid
+flowchart TD
 
-This project was bootstrapped with [Vite](https://vitejs.dev/).
+subgraph Frontend[User Dashboards]
+    StudentUI[Student Dashboard]
+    TeacherUI[Teacher Dashboard]
+    HODUI[HOD Dashboard]
+end
 
-### Project setup
-```
-npm install
-```
+subgraph Backend[Node.js + Express API]
+    Auth[Authentication Service]
+    StudentCtrl[Student Controller]
+    TeacherCtrl[Teacher Controller]
+    HODCtrl[HOD Controller]
+    AttendanceCtrl[Attendance Service]
+    ResultCtrl[Result Service]
+end
 
-#### Compiles and hot-reloads for development
-```
-npm run dev
-```
+subgraph Database[MongoDB + Mongoose Models]
+    AdminTbl[(Admin Schema)]
+    StudentTbl[(Student Schema)]
+    TeacherTbl[(Teacher Schema)]
+    ClassTbl[(Class Schema)]
+    CourseTbl[(Course Schema)]
+    EnrollmentTbl[(Enrollment Schema)]
+    AttendanceTbl[(Attendance Schema)]
+    ResultTbl[(Result Schema)]
+end
 
-#### Compiles and minifies for production
-```
-npm run build
-```
+%% User Interaction
+StudentUI -->|Login / View Results| Auth
+TeacherUI -->|Login / Manage Results / Attendance| Auth
+HODUI -->|Login / Manage Courses| Auth
 
-#### Customize configuration
-See [Configuration Reference](https://vitejs.dev/guide/).
+%% Backend Interaction
+Auth --> StudentCtrl
+Auth --> TeacherCtrl
+Auth --> HODCtrl
 
-### Support notes
-We are shipping our templates with a very basic React configuration to let you quickly get into the development process, but we don't discourage you from using any other configuration or framework built on the top of React. So, please note that any request dealing with React (e.g. extra features, customisations, et cetera) is to be considered out of the support scope.
+StudentCtrl --> StudentTbl
+TeacherCtrl --> TeacherTbl
+HODCtrl --> AdminTbl
 
-For more information about what support covers, please see our (FAQs)[https://cruip.com/faq/].
+TeacherCtrl --> AttendanceCtrl
+TeacherCtrl --> ResultCtrl
+AttendanceCtrl --> AttendanceTbl
+ResultCtrl --> ResultTbl
 
-## Credits
-
-- [Nucleo](https://nucleoapp.com/)
-
-## Terms and License
-
-- Released under the [GPL](https://www.gnu.org/licenses/gpl-3.0.html).
-- Copyright 2020 [Cruip](https://cruip.com/).
-- Use it for personal and commercial projects, but please don’t republish, redistribute, or resell the template.
-- Attribution is not required, although it is really appreciated.
-
-## About Us
-
-We're an Italian developer/designer duo creating high-quality design/code resources for developers, makers, and startups.
-
-## Stay in the loop
-
-If you would like to know when we release new resources, you can follow [@pacovitiello](https://x.com/pacovitiello) and [@DavidePacilio](https://x.com/DavidePacilio) on X, or you can subscribe to our [newsletter](https://cruip.com/newsletter/).
+HODCtrl --> CourseTbl
+HODCtrl --> ClassTbl
+HODCtrl --> EnrollmentTbl
+CourseTbl --> EnrollmentTbl
+ClassTbl --> EnrollmentTbl
+StudentCtrl --> EnrollmentTbl
